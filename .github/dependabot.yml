@@ -26,29 +26,6 @@ updates:
         dependency-name: "*"
         update-types: ["security"]
   
-  # CocoaPods dependencies (if you use CocoaPods)
-  - package-ecosystem: "cocoapods"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-      day: "sunday"
-    open-pull-requests-limit: 10
-    assignees:
-      - "garotm"
-    labels:
-      - "dependencies"
-      - "cocoapods"
-    commit-message:
-      prefix: "📦"
-      include: "scope"
-    ignore:
-      - dependency-name: "*"
-        update-types: ["version-update:semver-minor", "version-update:semver-patch"]
-    allow:
-      - dependency-type: "direct"
-        dependency-name: "*"
-        update-types: ["security"]
-  
   # GitHub Actions dependencies
   - package-ecosystem: "github-actions"
     directory: "/"
