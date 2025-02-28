@@ -17,7 +17,7 @@ IconInk is a local-only iOS application for tattoo and piercing professionals to
 - PDFKit for consent form generation
 - LocalAuthentication for Face ID/Touch ID
 - XCTest for testing
-- Xcode 16.2 
+- Xcode 16.2
 
 ## Development Principles
 1. **Privacy First**: All data must remain local on the device with no cloud connectivity
