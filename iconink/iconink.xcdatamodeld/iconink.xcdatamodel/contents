@@ -1,9 +1,107 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="false" userDefinedModelVersionIdentifier="">
-    <entity name="Item" representedClassName="Item" syncable="YES" codeGenerationType="class">
-        <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22522" systemVersion="24C5" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Client" representedClassName="Client" syncable="YES" codeGenerationType="class">
+        <!-- Basic client information -->
+        <attribute name="firstName" attributeType="String"/>
+        <attribute name="lastName" attributeType="String"/>
+        <attribute name="dateOfBirth" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="email" optional="YES" attributeType="String"/>
+        <attribute name="phone" optional="YES" attributeType="String"/>
+        <attribute name="address" optional="YES" attributeType="String"/>
+        <attribute name="city" optional="YES" attributeType="String"/>
+        <attribute name="state" optional="YES" attributeType="String"/>
+        <attribute name="zipCode" optional="YES" attributeType="String"/>
+        
+        <!-- ID verification -->
+        <attribute name="idType" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="idNumber" optional="YES" attributeType="String"/>
+        <attribute name="idExpirationDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="idState" optional="YES" attributeType="String"/>
+        <attribute name="isMinor" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="hasParentalConsent" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        
+        <!-- Metadata -->
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="updatedAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="notes" optional="YES" attributeType="String"/>
+        <attribute name="isFavorite" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        
+        <!-- Relationships -->
+        <relationship name="idImages" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="IDImage" inverseName="client" inverseEntity="IDImage"/>
+        <relationship name="consentForms" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ConsentForm" inverseName="client" inverseEntity="ConsentForm"/>
     </entity>
+    
+    <entity name="ConsentForm" representedClassName="ConsentForm" syncable="YES" codeGenerationType="class">
+        <!-- Core properties -->
+        <attribute name="formTitle" attributeType="String"/>
+        <attribute name="formType" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="formStatus" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="serviceDate" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="serviceDescription" attributeType="String"/>
+        <attribute name="aftercareInstructions" optional="YES" attributeType="String"/>
+        <attribute name="formPath" optional="YES" attributeType="String"/>
+        
+        <!-- Service details (stored as JSON) -->
+        <attribute name="tattooDetailsJSON" optional="YES" attributeType="String"/>
+        <attribute name="piercingDetailsJSON" optional="YES" attributeType="String"/>
+        
+        <!-- Risk acknowledgments -->
+        <attribute name="acknowledgedRisksJSON" attributeType="String" defaultValueString="[]"/>
+        <attribute name="additionalAcknowledgments" optional="YES" attributeType="String"/>
+        
+        <!-- Metadata -->
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="updatedAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="notes" optional="YES" attributeType="String"/>
+        
+        <!-- Relationships -->
+        <relationship name="client" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Client" inverseName="consentForms" inverseEntity="Client"/>
+        <relationship name="signatures" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Signature" inverseName="consentForm" inverseEntity="Signature"/>
+    </entity>
+    
+    <entity name="IDImage" representedClassName="IDImage" syncable="YES" codeGenerationType="class">
+        <!-- Core properties -->
+        <attribute name="fileName" attributeType="String"/>
+        <attribute name="imagePath" attributeType="String"/>
+        <attribute name="captureDate" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="imageType" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        
+        <!-- OCR extracted data -->
+        <attribute name="extractedName" optional="YES" attributeType="String"/>
+        <attribute name="extractedDOB" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="extractedAddress" optional="YES" attributeType="String"/>
+        <attribute name="extractedIDNumber" optional="YES" attributeType="String"/>
+        <attribute name="extractedExpirationDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="extractedState" optional="YES" attributeType="String"/>
+        <attribute name="extractionConfidence" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        
+        <!-- Metadata -->
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="notes" optional="YES" attributeType="String"/>
+        
+        <!-- Relationships -->
+        <relationship name="client" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Client" inverseName="idImages" inverseEntity="Client"/>
+    </entity>
+    
+    <entity name="Signature" representedClassName="Signature" syncable="YES" codeGenerationType="class">
+        <!-- Core properties -->
+        <attribute name="fileName" attributeType="String"/>
+        <attribute name="signaturePath" attributeType="String"/>
+        <attribute name="captureDate" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="signatureType" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        
+        <!-- Metadata -->
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="notes" optional="YES" attributeType="String"/>
+        
+        <!-- Relationships -->
+        <relationship name="consentForm" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ConsentForm" inverseName="signatures" inverseEntity="ConsentForm"/>
+    </entity>
+    
     <elements>
-        <element name="Item" positionX="-63" positionY="-18" width="128" height="44"/>
+        <element name="Client" positionX="-63" positionY="-18" width="128" height="374"/>
+        <element name="ConsentForm" positionX="160" positionY="192" width="128" height="284"/>
+        <element name="IDImage" positionX="279" positionY="153" width="128" height="254"/>
+        <element name="Signature" positionX="261" positionY="189" width="128" height="134"/>
     </elements>
 </model>

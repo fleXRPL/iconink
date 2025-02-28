@@ -1,0 +1,36 @@
+disabled_rules: # rule identifiers turned off
+  - trailing_whitespace
+  - line_length
+  - function_body_length
+  - file_length
+  - type_body_length
+
+opt_in_rules: # some rules are turned off by default, so opt-in
+  - empty_count
+  - empty_string
+  - force_unwrapping
+  - implicitly_unwrapped_optional
+
+included: # paths to include during linting
+  - iconink
+
+excluded: # paths to ignore during linting
+  - iconink/Preview Content
+  - iconinkTests
+  - iconinkUITests
+  - Pods
+  - "**/*.generated.swift"
+
+identifier_name:
+  min_length: 2
+  excluded:
+    - id
+    - URL
+    - x
+    - y
+    - db
+
+force_cast: warning # implicitly
+force_try: warning # explicitly
+
+reporter: "xcode" # reporter type (json, csv, checkstyle, codeclimate, junit, html, emoji, sonarqube, markdown, github-actions-logging, summary) 
