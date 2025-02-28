@@ -1,0 +1,96 @@
+# Swift .gitignore
+
+## User settings
+xcuserdata/
+*.xcuserstate
+project.xcworkspace/
+xcshareddata/
+
+## App packaging
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+## Obj-C/Swift specific
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+## Playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+# Swift Package Manager
+.build/
+Packages/
+Package.pins
+Package.resolved
+*.xcodeproj
+.swiftpm
+
+# CocoaPods (if used in the future)
+Pods/
+Podfile.lock
+
+# Carthage (if used in the future)
+Carthage/Build/
+
+# fastlane (if used in the future)
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output
+
+# Code Injection (if used for development)
+iOSInjectionProject/
+
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+
+# Xcode
+build/
+DerivedData/
+*.moved-aside
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+
+# Cursor-specific
+.cursor/temp/
+*.cursor-log
+
+# SwiftData (specific to this project)
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+
+# Temporary files
+*.swp
+*.tmp
+*~.nib
+
+# Keychain files
+*.keychain
+*.keychain-db
+
+# Coverage reports
+coverage/
+
+# Local environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local 

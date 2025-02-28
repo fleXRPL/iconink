@@ -1,0 +1,27 @@
+Running SwiftLint...
+====================
+/Users/garotconklin/garotm/fleXRPL/iconink/iconink/iconink/Models/Signature+Extensions.swift:44:102: warning: Force Unwrapping Violation: Force unwrapping should be avoided (force_unwrapping)
+/Users/garotconklin/garotm/fleXRPL/iconink/iconink/iconink/Models/Signature+Extensions.swift:73:102: warning: Force Unwrapping Violation: Force unwrapping should be avoided (force_unwrapping)
+/Users/garotconklin/garotm/fleXRPL/iconink/iconink/iconink/Models/Signature+Extensions.swift:90:102: warning: Force Unwrapping Violation: Force unwrapping should be avoided (force_unwrapping)
+/Users/garotconklin/garotm/fleXRPL/iconink/iconink/iconink/Models/ConsentForm+Extensions.swift:179:5: error: Cyclomatic Complexity Violation: Function should have complexity 10 or less; currently complexity is 24 (cyclomatic_complexity)
+/Users/garotconklin/garotm/fleXRPL/iconink/iconink/iconink/Models/ConsentForm+Extensions.swift:434:25: warning: Prefer For-Where Violation: `where` clauses are preferred over a single `if` inside a `for` (for_where)
+/Users/garotconklin/garotm/fleXRPL/iconink/iconink/iconink/Models/ConsentForm+Extensions.swift:460:25: warning: Prefer For-Where Violation: `where` clauses are preferred over a single `if` inside a `for` (for_where)
+/Users/garotconklin/garotm/fleXRPL/iconink/iconink/iconink/Models/ConsentForm+Extensions.swift:75:88: warning: Force Unwrapping Violation: Force unwrapping should be avoided (force_unwrapping)
+/Users/garotconklin/garotm/fleXRPL/iconink/iconink/iconink/Models/ConsentForm+Extensions.swift:101:90: warning: Force Unwrapping Violation: Force unwrapping should be avoided (force_unwrapping)
+/Users/garotconklin/garotm/fleXRPL/iconink/iconink/iconink/Models/ConsentForm+Extensions.swift:127:83: warning: Force Unwrapping Violation: Force unwrapping should be avoided (force_unwrapping)
+/Users/garotconklin/garotm/fleXRPL/iconink/iconink/iconink/Models/ConsentForm+Extensions.swift:192:102: warning: Force Unwrapping Violation: Force unwrapping should be avoided (force_unwrapping)
+/Users/garotconklin/garotm/fleXRPL/iconink/iconink/Persistence.swift:44:56: warning: Force Unwrapping Violation: Force unwrapping should be avoided (force_unwrapping)
+/Users/garotconklin/garotm/fleXRPL/iconink/iconink/iconink/Models/IDImage+Extensions.swift:44:102: warning: Force Unwrapping Violation: Force unwrapping should be avoided (force_unwrapping)
+/Users/garotconklin/garotm/fleXRPL/iconink/iconink/iconink/Models/IDImage+Extensions.swift:73:102: warning: Force Unwrapping Violation: Force unwrapping should be avoided (force_unwrapping)
+/Users/garotconklin/garotm/fleXRPL/iconink/iconink/iconink/Models/IDImage+Extensions.swift:90:102: warning: Force Unwrapping Violation: Force unwrapping should be avoided (force_unwrapping)
+/Users/garotconklin/garotm/fleXRPL/iconink/iconink/iconink/Utilities/SecurityManager.swift:150:66: warning: Force Unwrapping Violation: Force unwrapping should be avoided (force_unwrapping)
+/Users/garotconklin/garotm/fleXRPL/iconink/iconink/iconink/Utilities/SecurityManager.swift:196:17: warning: Identifier Name Violation: Variable name 'i' should be between 2 and 40 characters long (identifier_name)
+/Users/garotconklin/garotm/fleXRPL/iconink/iconink/ContentView.swift:269:65: warning: Multiple Closures with Trailing Closure Violation: Trailing closure syntax should not be used when passing more than one closure argument (multiple_closures_with_trailing_closure)
+/Users/garotconklin/garotm/fleXRPL/iconink/iconink/ContentView.swift:453:60: warning: Multiple Closures with Trailing Closure Violation: Trailing closure syntax should not be used when passing more than one closure argument (multiple_closures_with_trailing_closure)
+/Users/garotconklin/garotm/fleXRPL/iconink/iconink/ContentView.swift:675:63: warning: Multiple Closures with Trailing Closure Violation: Trailing closure syntax should not be used when passing more than one closure argument (multiple_closures_with_trailing_closure)
+/Users/garotconklin/garotm/fleXRPL/iconink/iconink/ContentView.swift:737:54: warning: Multiple Closures with Trailing Closure Violation: Trailing closure syntax should not be used when passing more than one closure argument (multiple_closures_with_trailing_closure)
+/Users/garotconklin/garotm/fleXRPL/iconink/iconink/iconink/Utilities/FileManager+Extensions.swift:15:92: warning: Force Unwrapping Violation: Force unwrapping should be avoided (force_unwrapping)
+/Users/garotconklin/garotm/fleXRPL/iconink/iconink/iconinkApp.swift:11:8: error: Type Name Violation: Type name 'iconinkApp' should start with an uppercase character (type_name)
+====================
+⚠️ SwiftLint found issues. Exit code: 2
+Fix the issues or update the configuration in .swiftlint.yml

@@ -1,0 +1,93 @@
+---
+description: IconInk Project Guidelines
+globs: ["*.swift", "*.md"]
+alwaysApply: true
+---
+
+# IconInk Project Guidelines for AI Assistance
+
+## Project Overview
+IconInk is a local-only iOS application for tattoo and piercing professionals to manage client information, scan IDs, capture signatures, and generate consent forms. The app is built using Swift, SwiftUI, and CoreData with a strong emphasis on privacy, security, and ease of use.
+
+## Technology Stack
+- Swift 5.9+ for programming language
+- SwiftUI for the user interface
+- CoreData for local-only data persistence
+- Vision framework for ID scanning and OCR
+- PDFKit for consent form generation
+- LocalAuthentication for Face ID/Touch ID
+- XCTest for testing
+- Xcode 16.2
+
+## Development Principles
+1. **Privacy First**: All data must remain local on the device with no cloud connectivity
+2. **Minimalist Design**: Focus on creating a clean, simple, and intuitive user interface
+3. **MVP Approach**: Prioritize core functionality to deliver a working product
+4. **Code Quality**: Follow SwiftLint rules and Swift API design guidelines
+5. **Accessibility**: Ensure the application is usable by everyone
+
+## Architecture Guidelines
+- Use MVP approach for every aspect of the project
+- Use MVVM (Model-View-ViewModel) architecture
+- Separate concerns between data, presentation, and business logic
+- Keep views stateless where possible
+- Ensure proper error handling throughout the app
+- Use dependency injection for better testability
+- Use only native Apple services
+
+## File Organization
+- Group files by feature rather than type
+- Follow the Apple naming conventions
+- Keep clear separation between UI and business logic
+- CoreData model extensions should be kept in separate files
+
+## Documentation Standards
+- Include documentation comments for all public API
+- Follow Apple's documentation style
+- Keep the Wiki updated with architectural decisions
+
+## Swift Best Practices
+- Use Swift's strong type system to prevent errors
+- Never use force unwrapping (`!`)
+- Use proper optional handling with `guard let` or optional chaining
+- Leverage value types (structs) over reference types when possible
+- Use property wrappers for SwiftUI integration
+- Use Swift concurrency for asynchronous operations
+
+## Data Management
+- Define clear CoreData models with proper relationships
+- Use proper NSManagedObjectContext handling
+- Implement proper validation for user input
+- Ensure data consistency across the app
+- Implement backup and restore functionality
+- Use NSPredicate for efficient filtering
+
+## Security Requirements
+- Implement app lock using Face ID/Touch ID
+- Secure all stored data with appropriate encryption
+- Validate and sanitize all user input
+- Follow Apple's security best practices
+- Use FileProtectionType for stored files
+
+## Testing Approach
+- Use MVP approach for all tests
+- Write unit tests for business logic
+- Create UI tests for critical user flows
+- Test edge cases and error conditions
+- Ensure accessibility testing
+- Mock CoreData for unit testing
+
+## Reminder for AI
+When assisting with this project, always:
+1. Prioritize local-only data solutions
+2. Consider privacy implications of any feature
+3. Optimize for a simple, focused user experience
+4. Recommend Swift-idiomatic solutions
+5. Ensure code is production-ready with proper error handling
+6. Consider performance on older iOS devices
+7. Use CoreData best practices (not SwiftData)
+8. This is a production app going into the Apple Store
+9. Xcode is being used as the final deployment platform
+10. All code is being maintained in GitHub - https://github.com/fleXRPL/iconink
+11. All documentation is being maintained in GitHub WIKI - https://github.com/fleXRPL/iconink/wiki
+12. All context for every aspect of the project is MVP - Minimum Viable Product

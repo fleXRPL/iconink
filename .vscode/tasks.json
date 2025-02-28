@@ -1,0 +1,48 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "SwiftLint: Check",
+            "type": "shell",
+            "command": "bash ${workspaceFolder}/scripts/run_swiftlint.sh",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new",
+                "showReuseMessage": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "SwiftLint: Fix Issues",
+            "type": "shell",
+            "command": "bash ${workspaceFolder}/scripts/run_swiftlint.sh --fix",
+            "group": "test",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new",
+                "showReuseMessage": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Build iconink",
+            "type": "shell",
+            "command": "xcodebuild -project iconink.xcodeproj -scheme iconink -configuration Debug -destination 'platform=iOS Simulator,name=iPhone 15 Pro'",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        }
+    ]
+} 

@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct iconinkApp: App {
+struct IconinkApp: App {
     let persistenceController = PersistenceController.shared
 
     var body: some Scene {

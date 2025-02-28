@@ -1,0 +1,42 @@
+version: 2
+updates:
+  # Swift Package Manager dependencies
+  - package-ecosystem: "swift"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "sunday"
+    open-pull-requests-limit: 10
+    assignees:
+      - "garotm"
+    labels:
+      - "dependencies"
+      - "swift"
+    commit-message:
+      prefix: "📦"
+      include: "scope"
+    # Only allow security updates for non-major versions
+    # and only auto-merge security patches
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-minor", "version-update:semver-patch"]
+    # Allow security updates for all versions
+    allow:
+      - dependency-type: "direct"
+        dependency-name: "*"
+        update-types: ["security"]
+  
+  # GitHub Actions dependencies
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    open-pull-requests-limit: 5
+    assignees:
+      - "garotm"
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "👷"
+      include: "scope" 
