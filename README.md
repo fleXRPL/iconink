@@ -25,7 +25,7 @@ IconInk is built using:
 
 - Swift 5.9+
 - SwiftUI for the user interface
-- SwiftData for local-only data persistence
+- CoreData for local-only data persistence
 - Vision framework for ID scanning
 - PDFKit for document generation
 - Local Authentication framework for device security
