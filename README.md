@@ -68,4 +68,4 @@ IconInk is designed with privacy as a core principle. All data is stored locally
 
 ## Contact
 
-For questions or support, please contact support@iconink.app or open an issue on GitHub. 
+For questions or support, please contact support@iconink.app or open an issue on GitHub.
