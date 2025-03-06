@@ -224,6 +224,16 @@ struct ClientListView: View {
     
     var body: some View {
         VStack {
+            // App Icon and Title
+            HStack {
+                Image("IconInk_nobg")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 44)
+                Spacer()
+            }
+            .padding(.horizontal)
+            
             // Filter picker
             Picker("Filter", selection: $filterOption) {
                 ForEach(FilterOption.allCases) { option in
@@ -389,7 +399,7 @@ struct ClientDetailView: View {
                 }
             }
             
-            if let idImages = client.idImages, !idImages.isEmpty {
+            if let idImages = client.idImages, idImages.count > 0 { // swiftlint:disable:this empty_count
                 Section("ID Images") {
                     ScrollView(.horizontal) {
                         HStack {
@@ -408,7 +418,7 @@ struct ClientDetailView: View {
                 }
             }
             
-            if let forms = client.consentForms, !forms.isEmpty {
+            if let forms = client.consentForms, forms.count > 0 { // swiftlint:disable:this empty_count
                 Section("Consent Forms") {
                     ForEach(Array(forms as? Set<ConsentForm> ?? []), id: \.self) { form in
                         NavigationLink(destination: Text("Form details coming soon")) {
@@ -441,7 +451,7 @@ struct ClientDetailView: View {
                 }
             }
             
-            if let notes = client.notes, !notes.isEmpty {
+            if let notes = client.notes, notes.count > 0 { // swiftlint:disable:this empty_count
                 Section("Notes") {
                     Text(notes)
                 }
@@ -462,7 +472,7 @@ struct ClientDetailView: View {
             }
         }
         .sheet(isPresented: $isEditingClient) {
-            Text("Edit client view coming soon")
+            EditClientView(client: client)
         }
         .sheet(isPresented: $showingIDScanner) {
             Text("ID Scanner view coming soon")
@@ -484,7 +494,162 @@ struct ClientDetailView: View {
     }
 }
 
-// MARK: - Add Client View (Placeholder)
+// MARK: - Edit Client View
+
+struct EditClientView: View {
+    @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.dismiss) private var dismiss
+    
+    let client: Client
+    
+    @State private var firstName: String
+    @State private var lastName: String
+    @State private var dateOfBirth: Date
+    @State private var email: String
+    @State private var phone: String
+    @State private var address: String
+    @State private var city: String
+    @State private var state: String
+    @State private var zipCode: String
+    @State private var notes: String
+    @State private var isFavorite: Bool
+    @State private var showingAlert = false
+    @State private var alertMessage = ""
+    
+    init(client: Client) {
+        self.client = client
+        _firstName = State(initialValue: client.firstName ?? "")
+        _lastName = State(initialValue: client.lastName ?? "")
+        _dateOfBirth = State(initialValue: client.dateOfBirth ?? Date())
+        _email = State(initialValue: client.email ?? "")
+        _phone = State(initialValue: client.phone ?? "")
+        _address = State(initialValue: client.address ?? "")
+        _city = State(initialValue: client.city ?? "")
+        _state = State(initialValue: client.state ?? "")
+        _zipCode = State(initialValue: client.zipCode ?? "")
+        _notes = State(initialValue: client.notes ?? "")
+        _isFavorite = State(initialValue: client.isFavorite)
+    }
+    
+    var isValidForm: Bool {
+        !firstName.trimmed.isEmpty && !lastName.trimmed.isEmpty
+    }
+    
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section("Basic Information") {
+                    TextField("First Name", text: $firstName)
+                        .textContentType(.givenName)
+                    TextField("Last Name", text: $lastName)
+                        .textContentType(.familyName)
+                    DatePicker("Date of Birth", selection: $dateOfBirth, in: ...Date(), displayedComponents: .date)
+                }
+                
+                Section("Contact Information") {
+                    TextField("Email", text: $email)
+                        .textContentType(.emailAddress)
+                        .keyboardType(.emailAddress)
+                        .autocapitalization(.none)
+                    TextField("Phone", text: $phone)
+                        .textContentType(.telephoneNumber)
+                        .keyboardType(.phonePad)
+                }
+                
+                Section("Address") {
+                    TextField("Street Address", text: $address)
+                        .textContentType(.streetAddressLine1)
+                    TextField("City", text: $city)
+                        .textContentType(.addressCity)
+                    TextField("State", text: $state)
+                        .textContentType(.addressState)
+                    TextField("ZIP Code", text: $zipCode)
+                        .textContentType(.postalCode)
+                        .keyboardType(.numberPad)
+                }
+                
+                Section("Additional Notes") {
+                    TextEditor(text: $notes)
+                        .frame(minHeight: 100)
+                }
+                
+                Section {
+                    Toggle("Favorite", isOn: $isFavorite)
+                }
+            }
+            .navigationTitle("Edit Client")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save") {
+                        validateAndSave()
+                    }
+                    .disabled(!isValidForm)
+                }
+            }
+            .alert("Error", isPresented: $showingAlert) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text(alertMessage)
+            }
+        }
+    }
+    
+    private func validateAndSave() {
+        // Validate email if provided
+        if !email.isEmpty && !email.isValidEmail {
+            alertMessage = "Please enter a valid email address"
+            showingAlert = true
+            return
+        }
+        
+        // Validate phone if provided
+        if !phone.isEmpty && !phone.isValidUSPhoneNumber {
+            alertMessage = "Please enter a valid phone number"
+            showingAlert = true
+            return
+        }
+        
+        // Validate ZIP code if provided
+        if !zipCode.isEmpty && !zipCode.isValidZIPCode {
+            alertMessage = "Please enter a valid ZIP code"
+            showingAlert = true
+            return
+        }
+        
+        withAnimation {
+            client.firstName = firstName.trimmed
+            client.lastName = lastName.trimmed
+            client.dateOfBirth = dateOfBirth
+            client.email = email.isEmpty ? nil : email.trimmed
+            client.phone = phone.isEmpty ? nil : phone.trimmed
+            client.address = address.isEmpty ? nil : address.trimmed
+            client.city = city.isEmpty ? nil : city.trimmed
+            client.state = state.isEmpty ? nil : state.trimmed
+            client.zipCode = zipCode.isEmpty ? nil : zipCode.trimmed
+            client.notes = notes.isEmpty ? nil : notes.trimmed
+            client.updatedAt = Date()
+            client.isFavorite = isFavorite
+            client.isMinor = Calendar.current.dateComponents([.year], from: dateOfBirth, to: Date()).year ?? 0 < 18
+            
+            do {
+                try viewContext.save()
+                dismiss()
+            } catch {
+                let nsError = error as NSError
+                alertMessage = "Error saving client: \(nsError.localizedDescription)"
+                showingAlert = true
+            }
+        }
+    }
+}
+
+// MARK: - Add Client View
 
 struct AddClientView: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -495,22 +660,54 @@ struct AddClientView: View {
     @State private var dateOfBirth = Date()
     @State private var email = ""
     @State private var phone = ""
+    @State private var address = ""
+    @State private var city = ""
+    @State private var state = ""
+    @State private var zipCode = ""
+    @State private var notes = ""
+    @State private var showingAlert = false
+    @State private var alertMessage = ""
+    
+    var isValidForm: Bool {
+        !firstName.trimmed.isEmpty && !lastName.trimmed.isEmpty
+    }
     
     var body: some View {
         NavigationStack {
             Form {
                 Section("Basic Information") {
                     TextField("First Name", text: $firstName)
+                        .textContentType(.givenName)
                     TextField("Last Name", text: $lastName)
-                    DatePicker("Date of Birth", selection: $dateOfBirth, displayedComponents: .date)
+                        .textContentType(.familyName)
+                    DatePicker("Date of Birth", selection: $dateOfBirth, in: ...Date(), displayedComponents: .date)
                 }
                 
                 Section("Contact Information") {
                     TextField("Email", text: $email)
+                        .textContentType(.emailAddress)
                         .keyboardType(.emailAddress)
                         .autocapitalization(.none)
                     TextField("Phone", text: $phone)
+                        .textContentType(.telephoneNumber)
                         .keyboardType(.phonePad)
+                }
+                
+                Section("Address") {
+                    TextField("Street Address", text: $address)
+                        .textContentType(.streetAddressLine1)
+                    TextField("City", text: $city)
+                        .textContentType(.addressCity)
+                    TextField("State", text: $state)
+                        .textContentType(.addressState)
+                    TextField("ZIP Code", text: $zipCode)
+                        .textContentType(.postalCode)
+                        .keyboardType(.numberPad)
+                }
+                
+                Section("Additional Notes") {
+                    TextEditor(text: $notes)
+                        .frame(minHeight: 100)
                 }
             }
             .navigationTitle("Add Client")
@@ -523,22 +720,53 @@ struct AddClientView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
-                        saveClient()
+                        validateAndSave()
                     }
-                    .disabled(firstName.isEmpty || lastName.isEmpty)
+                    .disabled(!isValidForm)
                 }
+            }
+            .alert("Error", isPresented: $showingAlert) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text(alertMessage)
             }
         }
     }
     
-    private func saveClient() {
+    private func validateAndSave() {
+        // Validate email if provided
+        if !email.isEmpty && !email.isValidEmail {
+            alertMessage = "Please enter a valid email address"
+            showingAlert = true
+            return
+        }
+        
+        // Validate phone if provided
+        if !phone.isEmpty && !phone.isValidUSPhoneNumber {
+            alertMessage = "Please enter a valid phone number"
+            showingAlert = true
+            return
+        }
+        
+        // Validate ZIP code if provided
+        if !zipCode.isEmpty && !zipCode.isValidZIPCode {
+            alertMessage = "Please enter a valid ZIP code"
+            showingAlert = true
+            return
+        }
+        
         withAnimation {
             let newClient = Client(context: viewContext)
-            newClient.firstName = firstName
-            newClient.lastName = lastName
+            newClient.firstName = firstName.trimmed
+            newClient.lastName = lastName.trimmed
             newClient.dateOfBirth = dateOfBirth
-            newClient.email = email.isEmpty ? nil : email
-            newClient.phone = phone.isEmpty ? nil : phone
+            newClient.email = email.isEmpty ? nil : email.trimmed
+            newClient.phone = phone.isEmpty ? nil : phone.trimmed
+            newClient.address = address.isEmpty ? nil : address.trimmed
+            newClient.city = city.isEmpty ? nil : city.trimmed
+            newClient.state = state.isEmpty ? nil : state.trimmed
+            newClient.zipCode = zipCode.isEmpty ? nil : zipCode.trimmed
+            newClient.notes = notes.isEmpty ? nil : notes.trimmed
             newClient.createdAt = Date()
             newClient.updatedAt = Date()
             newClient.idType = 0 // Default to driver's license
@@ -551,7 +779,8 @@ struct AddClientView: View {
                 dismiss()
             } catch {
                 let nsError = error as NSError
-                print("Error saving client: \(nsError), \(nsError.userInfo)")
+                alertMessage = "Error saving client: \(nsError.localizedDescription)"
+                showingAlert = true
             }
         }
     }
@@ -777,13 +1006,13 @@ struct SettingsView: View {
             Section("Security") {
                 if SecurityManager.shared.isBiometricAvailable {
                     Toggle("Use \(SecurityManager.shared.biometricType.displayName)", isOn: $useBiometrics)
-                        .onChange(of: useBiometrics) { newValue in
+                        .onChange(of: useBiometrics) { _, newValue in
                             SecurityManager.shared.useBiometrics = newValue
                         }
                 }
                 
                 Toggle("Use Passcode", isOn: $usePasscode)
-                    .onChange(of: usePasscode) { newValue in
+                    .onChange(of: usePasscode) { _, newValue in
                         if newValue {
                             showingSetPasscode = true
                         } else {
@@ -804,7 +1033,7 @@ struct SettingsView: View {
                     Text("30 minutes").tag(30)
                     Text("Never").tag(-1)
                 }
-                .onChange(of: autoLockTimeout) { newValue in
+                .onChange(of: autoLockTimeout) { _, newValue in
                     SecurityManager.shared.autoLockTimeout = newValue
                 }
                 

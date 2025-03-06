@@ -148,4 +148,19 @@ extension FileManager {
         formatter.countStyle = .file
         return formatter.string(fromByteCount: size)
     }
+    
+    static func getDocumentsDirectory() -> URL {
+        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+    }
+    
+    static func getAppSupportDirectory() -> URL {
+        FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+    }
+    
+    static func ensureDirectoryExists(at url: URL) throws {
+        var isDirectory: ObjCBool = false
+        if !FileManager.default.fileExists(atPath: url.path, isDirectory: &isDirectory) {
+            try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
+        }
+    }
 } 
