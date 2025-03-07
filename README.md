@@ -64,7 +64,7 @@ IconInk is released under the MIT License. See [LICENSE](LICENSE) for details.
 
 ## Privacy
 
-IconInk is designed with privacy as a core principle. All data is stored locally on the user's device and is never transmitted to external servers. See our [Privacy Policy](https://github.com/iconink/wiki/Privacy-Policy) for more information.
+IconInk is designed with privacy as a core principle. All data is stored locally on the user's device and is never transmitted to external servers. See our [Privacy Policy](https://github.com/fleXRPL/iconink/wiki/Privacy-Policy) for more information.
 
 ## Contact
 
