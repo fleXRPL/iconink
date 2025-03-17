@@ -43,6 +43,22 @@
             "problemMatcher": [
                 "$gcc"
             ]
+        },
+        {
+            "label": "Build iconink",
+            "type": "shell",
+            "command": "xcodebuild -project iconink.xcodeproj -scheme iconink -configuration Debug -destination 'platform=iOS Simulator,name=iPhone 15 Pro'",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
         }
     ]
 } 
