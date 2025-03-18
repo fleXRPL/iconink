@@ -17,14 +17,19 @@ cyclomatic_complexity:
   error: 20
 
 included: # paths to include during linting
-  - iconink
+  - "*.swift"
+  - "**/*.swift"
+  - Controllers
+  - Views
+  - Models
 
 excluded: # paths to ignore during linting
-  - iconink/Preview Content
+  - Preview Content
   - iconinkTests
   - iconinkUITests
   - Pods
   - "**/*.generated.swift"
+  - .build
 
 identifier_name:
   min_length: 2
