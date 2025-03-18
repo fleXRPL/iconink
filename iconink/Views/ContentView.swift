@@ -1,18 +1,18 @@
 import SwiftUI
+import CoreData
 
 struct ContentView: View {
-    @State private var searchResults = [String]()
-
+    @Environment(\.managedObjectContext) private var viewContext
+    
     var body: some View {
-        if searchResults.isEmpty {
-            Text("No results found")
+        NavigationStack {
+            Text("IconInk")
+                .navigationTitle("IconInk")
         }
     }
 }
 
-enum Tab {
-    case forms
-    case clients
-    case scan
-    case settings
+#Preview {
+    ContentView()
+        .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
 } 
