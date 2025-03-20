@@ -24,4 +24,4 @@ struct IconInkApp: App {
             return NSManagedObject()
         }
     }
-}
+} 
