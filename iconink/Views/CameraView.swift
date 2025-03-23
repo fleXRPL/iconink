@@ -17,7 +17,9 @@ struct CameraView: View {
     
     static func preview() -> CameraView {
         let context = PersistenceController.preview.container.viewContext
-        let entityDescription = NSEntityDescription.entity(forEntityName: "Client", in: context)!
+        guard let entityDescription = NSEntityDescription.entity(forEntityName: "Client", in: context) else {
+            fatalError("Failed to get entity description for Client")
+        }
         let client = NSManagedObject(entity: entityDescription, insertInto: context)
         // Set basic properties for preview
         client.setValue(UUID(), forKey: "id")
@@ -220,4 +222,4 @@ struct CameraPreviewView: UIViewRepresentable {
 
 #Preview {
     CameraView.preview()
-} 
+}

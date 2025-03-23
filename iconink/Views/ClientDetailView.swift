@@ -20,6 +20,20 @@ struct ClientDetailView: View {
             }
             
             Section("ID Images") {
+                if let frontImage = client.idFrontImage {
+                    Image(uiImage: frontImage)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxHeight: 200)
+                }
+                
+                if let backImage = client.idBackImage {
+                    Image(uiImage: backImage)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxHeight: 200)
+                }
+                
                 Button {
                     isCapturingFront = true
                     showingIDCamera = true
@@ -88,4 +102,4 @@ struct ClientDetailView: View {
         ClientDetailView(client: client)
     }
     .environment(\.managedObjectContext, context)
-} 
+}
