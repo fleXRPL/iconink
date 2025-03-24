@@ -101,9 +101,15 @@ struct NewConsentFormView: View {
         do {
             try viewContext.save()
             
-            // Generate PDF for export
-            pdfData = form.createPDF()
-            showingExportOptions = true
+            // Generate PDF for export using the enhanced PDFExporter with security features
+            let metadata = PDFExporter.standardMetadata(for: form)
+            
+            // Generate the PDF with watermark
+            if let generatedPDF = PDFExporter.generateSecurePDF(from: form) {
+                // Add standard metadata
+                pdfData = PDFExporter.addMetadata(to: generatedPDF, metadata: metadata)
+                showingExportOptions = true
+            }
             
             // Dismiss after a short delay to allow the export sheet to appear
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {

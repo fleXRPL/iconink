@@ -1,5 +1,7 @@
 import SwiftUI
 import CoreData
+import Vision
+import VisionKit
 
 struct ScannerView: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -43,6 +45,11 @@ struct ScannerView: View {
                             .cornerRadius(10)
                     }
                     .padding(.horizontal)
+                    
+                    // Add OCR scanning button if client is selected
+                    if selectedClient != nil {
+                        scanWithOCRButton
+                    }
                     
                     // Instructions
                     VStack(alignment: .leading, spacing: 12) {
@@ -93,6 +100,30 @@ struct ScannerView: View {
                     CameraView(isCapturingFront: isCapturingFront, client: client)
                 }
             }
+            .sheet(isPresented: $showingIDScanner) {
+                IDScannerView { extractedInfo in
+                    // Handle the extracted information
+                    if !extractedInfo.isEmpty, let client = selectedClient {
+                        // Update client with extracted information
+                        if let name = extractedInfo["name"] {
+                            client.name = name
+                        }
+                        if let email = extractedInfo["email"] {
+                            client.email = email
+                        }
+                        if let phone = extractedInfo["phone"] {
+                            client.phone = phone
+                        }
+                        
+                        // Save the context
+                        do {
+                            try viewContext.save()
+                        } catch {
+                            print("Error saving client info: \(error)")
+                        }
+                    }
+                }
+            }
         }
     }
     
@@ -105,6 +136,25 @@ struct ScannerView: View {
             Spacer()
         }
     }
+    
+    // Button to open the enhanced ID scanner
+    private var scanWithOCRButton: some View {
+        Button {
+            // Show the enhanced ID scanner view
+            showingIDScanner = true
+        } label: {
+            Label("Scan with Text Recognition", systemImage: "text.viewfinder")
+                .font(.headline)
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color.green)
+                .foregroundColor(.white)
+                .cornerRadius(10)
+        }
+        .padding(.horizontal)
+    }
+    
+    @State private var showingIDScanner = false
 }
 
 struct ClientSelectionView: View {
@@ -169,4 +219,4 @@ struct ClientSelectionView: View {
 #Preview {
     ScannerView()
         .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
-} 
+}

@@ -4,8 +4,13 @@ import UIKit
 import CoreData
 
 struct CameraView: View {
-    let isCapturingFront: Bool
-    let client: NSManagedObject
+    // For client ID photos
+    var isCapturingFront: Bool = true
+    var client: NSManagedObject?
+    
+    // For general image capture
+    var onImageCaptured: ((UIImage) -> Void)?
+    
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) private var colorScheme
@@ -178,6 +183,11 @@ struct CameraView: View {
         }
         .onAppear {
             camera.checkPermissions()
+        }
+        .alert("Camera Error", isPresented: $showingPermissionAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text("Please allow camera access to capture ID photos")
         }
     }
     

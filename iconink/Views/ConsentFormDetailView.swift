@@ -77,7 +77,14 @@ struct ConsentFormDetailView: View {
     }
     
     private func exportPDF() {
-        pdfData = form.createPDF()
-        showingExportOptions = true
+        // Use the enhanced PDFExporter to create a secure PDF with metadata
+        let metadata = PDFExporter.standardMetadata(for: form)
+        
+        // Generate the PDF with watermark
+        if let generatedPDF = PDFExporter.generateSecurePDF(from: form) {
+            // Add standard metadata
+            pdfData = PDFExporter.addMetadata(to: generatedPDF, metadata: metadata)
+            showingExportOptions = true
+        }
     }
 }

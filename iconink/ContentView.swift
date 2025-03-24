@@ -81,38 +81,15 @@ struct ContentView: View {
     }
     
     private func authenticate() {
-        let context = LAContext()
-        var error: NSError?
-        
-        // Check if biometric authentication is available
-        if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
-            // Use biometric authentication
-            let reason = "Unlock IconInk"
-            
-            context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) { success, authenticationError in
-                DispatchQueue.main.async {
-                    if success {
-                        isUnlocked = true
-                        authError = false
-                    } else {
-                        authError = true
-                        errorMessage = "Authentication failed: \(authenticationError?.localizedDescription ?? "Unknown error")"
-                    }
-                }
-            }
-        } else {
-            // Fallback to passcode
-            let reason = "Unlock IconInk"
-            
-            context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: reason) { success, authenticationError in
-                DispatchQueue.main.async {
-                    if success {
-                        isUnlocked = true
-                        authError = false
-                    } else {
-                        authError = true
-                        errorMessage = "Authentication failed: \(authenticationError?.localizedDescription ?? "Unknown error")"
-                    }
+        // Use the SecurityManager to handle authentication
+        SecurityManager.shared.authenticateWithBiometrics(reason: "Unlock IconInk") { success, error in
+            DispatchQueue.main.async {
+                if success {
+                    isUnlocked = true
+                    authError = false
+                } else {
+                    authError = true
+                    errorMessage = "Authentication failed: \(error?.localizedDescription ?? "Unknown error")"
                 }
             }
         }
