@@ -19,13 +19,27 @@ struct NewConsentFormView: View {
     private var templateContent: String {
         switch defaultConsent {
         case "Tattoo":
-            return "I, the undersigned, consent to receive a tattoo from the artist at this establishment. I acknowledge that I have been informed of the risks associated with getting a tattoo, including but not limited to infection, allergic reactions, and scarring. I confirm that I am not under the influence of alcohol or drugs. I understand that the tattoo is permanent and that removal may be difficult, expensive, and may leave scarring."
+            return "I, the undersigned, consent to receive a tattoo from the artist at this establishment. " +
+                   "I acknowledge that I have been informed of the risks associated with getting a tattoo, " +
+                   "including but not limited to infection, allergic reactions, and scarring. " +
+                   "I confirm that I am not under the influence of alcohol or drugs. " +
+                   "I understand that the tattoo is permanent and that removal may be difficult, expensive, and may leave scarring."
         case "Piercing":
-            return "I, the undersigned, consent to receive a body piercing from the professional at this establishment. I acknowledge that I have been informed of the risks associated with getting a piercing, including but not limited to infection, allergic reactions, and scarring. I confirm that I am not under the influence of alcohol or drugs. I understand proper aftercare is essential and has been explained to me."
+            return "I, the undersigned, consent to receive a body piercing from the professional at this establishment. " +
+                   "I acknowledge that I have been informed of the risks associated with getting a piercing, " +
+                   "including but not limited to infection, allergic reactions, and scarring. " +
+                   "I confirm that I am not under the influence of alcohol or drugs. " +
+                   "I understand proper aftercare is essential and has been explained to me."
         case "Microblading":
-            return "I, the undersigned, consent to receive microblading services from the technician at this establishment. I acknowledge that I have been informed of the risks associated with microblading, including but not limited to infection, allergic reactions, and undesired results. I understand that the results may fade over time and touch-ups may be necessary. I confirm that I am not pregnant or breastfeeding."
+            return "I, the undersigned, consent to receive microblading services from the technician at this establishment. " +
+                   "I acknowledge that I have been informed of the risks associated with microblading, " +
+                   "including but not limited to infection, allergic reactions, and undesired results. " +
+                   "I understand that the results may fade over time and touch-ups may be necessary. " +
+                   "I confirm that I am not pregnant or breastfeeding."
         default: // Standard
-            return "I, the undersigned, hereby consent to the procedure described herein and acknowledge that I have been fully informed of the risks and benefits associated with this procedure. I confirm that I am of legal age and sound mind to provide this consent."
+            return "I, the undersigned, hereby consent to the procedure described herein and " +
+                   "acknowledge that I have been fully informed of the risks and benefits associated with this procedure. " +
+                   "I confirm that I am of legal age and sound mind to provide this consent."
         }
     }
     

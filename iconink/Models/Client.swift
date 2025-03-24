@@ -1,6 +1,13 @@
 import Foundation
 import CoreData
+
+#if canImport(UIKit)
 import UIKit
+typealias ImageType = UIImage
+#else
+import AppKit
+typealias ImageType = NSImage
+#endif
 
 @objc(Client)
 public class Client: NSManagedObject, Identifiable {
@@ -14,26 +21,28 @@ public class Client: NSManagedObject, Identifiable {
     @NSManaged public var updatedAt: Date?
     @NSManaged public var signature: Data?
     @NSManaged public var consentForms: NSSet?
+    @NSManaged public var idNumber: String?
+    @NSManaged public var address: String?
     
     public override init(entity: NSEntityDescription, insertInto context: NSManagedObjectContext?) {
         super.init(entity: entity, insertInto: context)
     }
     
     // Computed properties for ID images
-    var idFrontImage: UIImage? {
+    var idFrontImage: ImageType? {
         guard let data = frontIdPhoto else { return nil }
-        return UIImage(data: data)
+        return ImageType(data: data)
     }
     
-    var idBackImage: UIImage? {
+    var idBackImage: ImageType? {
         guard let data = backIdPhoto else { return nil }
-        return UIImage(data: data)
+        return ImageType(data: data)
     }
     
     // Computed property for signature image
-    var signatureImage: UIImage? {
+    var signatureImage: ImageType? {
         guard let data = signature else { return nil }
-        return UIImage(data: data)
+        return ImageType(data: data)
     }
     
     // Computed property for full name
@@ -78,20 +87,5 @@ extension Client {
                 name = newValue
             }
         }
-    }
-    
-    var idFrontImage: UIImage? {
-        guard let data = frontIdPhoto else { return nil }
-        return UIImage(data: data)
-    }
-    
-    var idBackImage: UIImage? {
-        guard let data = backIdPhoto else { return nil }
-        return UIImage(data: data)
-    }
-    
-    var fullName: String {
-        guard let name = name else { return "Unknown" }
-        return name
     }
 }

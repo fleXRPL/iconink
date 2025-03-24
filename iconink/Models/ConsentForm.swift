@@ -79,6 +79,8 @@ public class ConsentForm: NSManagedObject, Identifiable {
 }
 
 extension ConsentForm {
+    /// Creates a fetch request that retrieves ConsentForm instances from the persistence store
+    /// - Returns: A configured NSFetchRequest for ConsentForm entities
     @nonobjc public class func fetchRequest() -> NSFetchRequest<ConsentForm> {
         return NSFetchRequest<ConsentForm>(entityName: "ConsentForm")
     }

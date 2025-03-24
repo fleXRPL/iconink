@@ -171,24 +171,22 @@ class PDFGenerator {
             currentY += 400 // Use the full height we allocated
         } else {
             // Calculate actual height used
-            let lines = CTFrameGetLines(frame) as! [CTLine]
-            if lines.count > 0 {
-                var lineOrigins = [CGPoint](repeating: .zero, count: lines.count)
-                CTFrameGetLineOrigins(frame, CFRangeMake(0, lines.count), &lineOrigins)
+            guard let ctLines = CTFrameGetLines(frame) as? [CTLine], !ctLines.isEmpty else {
+                return currentY + 20 // Add a small padding if no lines
+            }
+            
+            var lineOrigins = [CGPoint](repeating: .zero, count: ctLines.count)
+            CTFrameGetLineOrigins(frame, CFRangeMake(0, ctLines.count), &lineOrigins)
+            
+            if let lastLineOrigin = lineOrigins.last, let lastLine = ctLines.last {
+                var ascent: CGFloat = 0
+                var descent: CGFloat = 0
+                var leading: CGFloat = 0
+                CTLineGetTypographicBounds(lastLine, &ascent, &descent, &leading)
                 
-                if let lastLineOrigin = lineOrigins.last {
-                    let lastLine = lines.last!
-                    var ascent: CGFloat = 0
-                    var descent: CGFloat = 0
-                    var leading: CGFloat = 0
-                    CTLineGetTypographicBounds(lastLine, &ascent, &descent, &leading)
-                    
-                    // Calculate the bottom of the last line
-                    let lastLineBottom = contentRect.origin.y + contentRect.height - lastLineOrigin.y + descent
-                    currentY = lastLineBottom + 20 // Add some padding
-                } else {
-                    currentY += 20 // Just add minimal spacing if no lines
-                }
+                // Calculate the bottom of the last line
+                let lastLineBottom = contentRect.origin.y + contentRect.height - lastLineOrigin.y + descent
+                currentY = lastLineBottom + 20 // Add some padding
             } else {
                 currentY += 20 // Just add minimal spacing if no lines
             }

@@ -54,7 +54,11 @@ class PDFExporter {
     ///   - fileName: The name to use for the file (without extension)
     /// - Returns: URL to the saved file or nil if saving failed
     static func savePDF(_ pdfData: Data, fileName: String) -> URL? {
-        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            print("Failed to access documents directory")
+            return nil
+        }
+        
         let fileURL = documentsDirectory.appendingPathComponent(fileName).appendingPathExtension("pdf")
         
         do {

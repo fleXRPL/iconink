@@ -105,21 +105,60 @@ struct ScannerView: View {
                     // Handle the extracted information
                     if !extractedInfo.isEmpty, let client = selectedClient {
                         // Update client with extracted information
-                        if let name = extractedInfo["name"] {
+                        // Validate mandatory fields
+                        guard let name = extractedInfo["name"], !name.isEmpty else {
+                            alertTitle = "Validation Error"
+                            alertMessage = "Name field is required"
+                            showingAlert = true
+                            return
+                        }
+
+                        // Update client with encrypted data
+                        if SettingsManager.shared.encryptData {
+                            // Convert string to data for encryption
+                            if let nameData = name.data(using: .utf8),
+                               let encryptedName = SecurityManager.shared.encryptData(nameData) {
+                                client.name = String(data: encryptedName, encoding: .utf8)
+                            } else {
+                                client.name = name
+                            }
+                            
+                            if let email = extractedInfo["email"], !email.isEmpty,
+                               let emailData = email.data(using: .utf8),
+                               let encryptedEmail = SecurityManager.shared.encryptData(emailData) {
+                                client.email = String(data: encryptedEmail, encoding: .utf8)
+                            } else if let email = extractedInfo["email"], !email.isEmpty {
+                                client.email = email
+                            }
+                            
+                            if let phone = extractedInfo["phone"], !phone.isEmpty,
+                               let phoneData = phone.data(using: .utf8),
+                               let encryptedPhone = SecurityManager.shared.encryptData(phoneData) {
+                                client.phone = String(data: encryptedPhone, encoding: .utf8)
+                            } else if let phone = extractedInfo["phone"], !phone.isEmpty {
+                                client.phone = phone
+                            }
+                        } else {
+                            // Store without encryption
                             client.name = name
+                            if let email = extractedInfo["email"], !email.isEmpty {
+                                client.email = email
+                            }
+                            if let phone = extractedInfo["phone"], !phone.isEmpty {
+                                client.phone = phone
+                            }
                         }
-                        if let email = extractedInfo["email"] {
-                            client.email = email
-                        }
-                        if let phone = extractedInfo["phone"] {
-                            client.phone = phone
-                        }
-                        
-                        // Save the context
+
+                        // Save with error handling
                         do {
                             try viewContext.save()
+                            alertTitle = "Success"
+                            alertMessage = "Client data saved securely"
+                            showingAlert = true
                         } catch {
-                            print("Error saving client info: \(error)")
+                            alertTitle = "Save Error"
+                            alertMessage = "Failed to save client data: \(error.localizedDescription)"
+                            showingAlert = true
                         }
                     }
                 }

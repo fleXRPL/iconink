@@ -77,14 +77,45 @@ struct ConsentFormDetailView: View {
     }
     
     private func exportPDF() {
-        // Use the enhanced PDFExporter to create a secure PDF with metadata
-        let metadata = PDFExporter.standardMetadata(for: form)
+        // Show loading indicator
+        let loadingIndicator = UIActivityIndicatorView(style: .large)
+        loadingIndicator.startAnimating()
+        loadingIndicator.center = UIApplication.shared.windows.first?.center ?? CGPoint(x: 0, y: 0)
+        UIApplication.shared.windows.first?.addSubview(loadingIndicator)
         
-        // Generate the PDF with watermark
-        if let generatedPDF = PDFExporter.generateSecurePDF(from: form) {
+        // Use background thread for PDF generation
+        DispatchQueue.global(qos: .userInitiated).async {
+            // Use the enhanced PDFExporter to create a secure PDF with metadata
+            let metadata = PDFExporter.standardMetadata(for: self.form)
+            
+            // Generate the PDF with watermark and optional encryption based on settings
+            let generatedPDF: Data?
+            if SettingsManager.shared.encryptData {
+                generatedPDF = PDFExporter.generateSecurePDF(from: self.form, encrypt: true)
+            } else {
+                generatedPDF = PDFExporter.generateSecurePDF(from: self.form)
+            }
+            
             // Add standard metadata
-            pdfData = PDFExporter.addMetadata(to: generatedPDF, metadata: metadata)
-            showingExportOptions = true
+            if let pdf = generatedPDF {
+                self.pdfData = PDFExporter.addMetadata(to: pdf, metadata: metadata)
+            }
+            
+            // Update UI on main thread
+            DispatchQueue.main.async {
+                // Remove loading indicator
+                loadingIndicator.removeFromSuperview()
+                
+                // Add haptic feedback on success
+                let generator = UINotificationFeedbackGenerator()
+                if self.pdfData != nil {
+                    generator.notificationOccurred(.success)
+                    self.showingExportOptions = true
+                } else {
+                    generator.notificationOccurred(.error)
+                    // Show error alert (would be implemented in a real app)
+                }
+            }
         }
     }
 }
