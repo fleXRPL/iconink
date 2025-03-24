@@ -9,5 +9,14 @@
         <attribute name="phone" optional="YES" attributeType="String"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="updatedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="signature" optional="YES" attributeType="Binary"/>
+        <relationship name="consentForms" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ConsentForm" inverseName="client" inverseEntity="ConsentForm"/>
     </entity>
-</model> 
+    <entity name="ConsentForm" representedClassName="ConsentForm" syncable="YES">
+        <attribute name="title" attributeType="String"/>
+        <attribute name="content" attributeType="String"/>
+        <attribute name="signature" optional="YES" attributeType="Binary"/>
+        <attribute name="dateCreated" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="client" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Client" inverseName="consentForms" inverseEntity="Client"/>
+    </entity>
+</model>

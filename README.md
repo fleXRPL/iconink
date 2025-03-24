@@ -1,71 +1,102 @@
 # IconInk
 
-<p align="center">
-  <img src="iconink/Assets.xcassets/IconInk_nobg.png" alt="IconInk Logo" width="400" />
-</p>
+IconInk is an iOS application for tattoo and piercing professionals to manage client information, scan IDs, capture signatures, and generate consent forms with a strong emphasis on privacy, security, and ease of use.
 
-A local-only iOS application for tattoo and piercing professionals to manage client information, scan IDs, capture signatures, and generate consent forms.
+![IconInk Logo](iconink/Assets.xcassets/AppIcon.appiconset/AppIcon-83.5@2x.png)
 
-## About IconInk
+## Features
 
-IconInk helps tattoo and piercing professionals streamline their client intake process while maintaining the highest standards of privacy and security. The application is designed to run completely locally on iOS devices with no cloud connectivity, ensuring that sensitive client information never leaves the device.
+- **Client Management**: Add, edit, and view client information
+- **ID Scanning**: Extract client information from government-issued ID documents
+- **Signature Capture**: Record client signatures for consent forms
+- **Consent Forms**: Generate and manage digital consent forms
+- **Security**: Local-only storage with optional biometric authentication and encryption
+- **Privacy-First**: All data is stored only on the device with no cloud connectivity
 
-### Key Features
+## Privacy & Security
 
-- **Client Management**: Create and maintain detailed client profiles
-- **ID Scanning**: Scan and validate client identification documents
-- **Digital Signatures**: Capture client signatures directly on the device
-- **Consent Form Generation**: Create, customize, and export professional consent forms
-- **Local Authentication**: Secure the app with Face ID, Touch ID, or passcode
-- **No Internet Required**: Works completely offline with no data transmission
+IconInk takes privacy and security seriously:
 
-## Technology
+- All data remains on the device with no cloud or external services
+- Optional biometric authentication (Face ID/Touch ID)
+- Data encryption for sensitive information
+- Secure storage of ID photos and personal details
+- Auto-lock feature to protect client data
 
-IconInk is built using:
+## Tech Stack
 
 - Swift 5.9+
-- SwiftUI for the user interface
-- CoreData for local-only data persistence
+- SwiftUI for UI
+- CoreData for local data storage
 - Vision framework for ID scanning
-- PDFKit for document generation
-- Local Authentication framework for device security
+- PDFKit for consent form generation
+- LocalAuthentication for biometric security
 
-## Documentation
+## Requirements
 
-For detailed documentation, please see the [IconInk Wiki](https://github.com/iconink/iconink/wiki):
+- iOS 15.0 or later
+- Xcode 16.2 or later
 
-- [Project Description](https://github.com/iconink/iconink/wiki/Project-Description)
-- [Architecture](https://github.com/iconink/iconink/wiki/Architecture)
-- [Data Model](https://github.com/iconink/iconink/wiki/Data-Model)
-- [Development Setup](https://github.com/iconink/iconink/wiki/Development-Setup)
-- [User Manual](https://github.com/iconink/iconink/wiki/User-Manual)
+## Installation
 
-## Getting Started
+1. Clone the repository:
+```
+git clone https://github.com/fleXRPL/iconink.git
+```
 
-See our [Development Setup](https://github.com/iconink/iconink/wiki/Development-Setup) guide for instructions on how to set up your development environment.
+2. Open the project in Xcode:
+```
+cd iconink
+open iconink/iconink.xcodeproj
+```
 
-### Requirements
+3. Build and run the application on your device or simulator.
 
-- macOS Sonoma (14.0) or later
-- Xcode 15.0 or later
-- iOS 17.0+ target device or simulator
+## Development
+
+### Architecture
+
+IconInk follows the MVVM (Model-View-ViewModel) architecture pattern:
+
+- **Models**: Core Data entities for clients, consent forms, etc.
+- **Views**: SwiftUI views for user interface
+- **ViewModels**: Business logic and data processing
+- **Utilities**: Helper classes for ID scanning, security, etc.
+
+### Project Structure
+
+- `Models/`: CoreData models and extensions
+- `Views/`: SwiftUI views for the user interface
+- `Controllers/`: Controllers for camera and other functionalities
+- `Utilities/`: Helper classes and utility functions
+- `IconInk.xcdatamodeld/`: CoreData model definitions
+- `Documentation/`: Project documentation
 
 ## Contributing
 
-We welcome contributions to IconInk! Please check out:
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/your-feature`)
+3. Commit your changes (`git commit -am 'Add new feature'`)
+4. Push to the branch (`git push origin feature/your-feature`)
+5. Create a new Pull Request
 
-- [How to Contribute](https://github.com/iconink/iconink/wiki/How-to-Contribute)
-- [Code of Conduct](https://github.com/iconink/iconink/wiki/Code-of-Conduct)
-- [Development Roadmap](https://github.com/iconink/iconink/wiki/Roadmap)
+### Code Style
+
+Follow the Swift style guide and SwiftLint rules included in the project.
 
 ## License
 
-IconInk is released under the MIT License. See [LICENSE](LICENSE) for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Privacy
+## Authors
 
-IconInk is designed with privacy as a core principle. All data is stored locally on the user's device and is never transmitted to external servers. See our [Privacy Policy](https://github.com/fleXRPL/iconink/wiki/Privacy-Policy) for more information.
+- **IconInk Team** - [GitHub](https://github.com/fleXRPL)
 
-## Contact
+## Documentation
 
-For questions or support, please contact support@iconink.app or open an issue on GitHub.
+Additional documentation is available in the [GitHub Wiki](https://github.com/fleXRPL/iconink/wiki).
+
+## Acknowledgments
+
+- Apple's [Vision Framework](https://developer.apple.com/documentation/vision) for ID scanning capabilities
+- [SwiftLint](https://github.com/realm/SwiftLint) for Swift style and convention enforcement

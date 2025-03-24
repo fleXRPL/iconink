@@ -3,15 +3,27 @@ import CoreData
 
 struct ConsentFormListView: View {
     @Environment(\.managedObjectContext) private var viewContext
+    @State private var showingClientSelection = false
+    @State private var searchText = ""
     
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \ConsentForm.dateCreated, ascending: false)],
         animation: .default)
     private var forms: FetchedResults<ConsentForm>
     
+    var filteredForms: [ConsentForm] {
+        if searchText.isEmpty {
+            return Array(forms)
+        }
+        return forms.filter { form in
+            form.title.localizedCaseInsensitiveContains(searchText) ||
+            (form.client?.fullName.localizedCaseInsensitiveContains(searchText) ?? false)
+        }
+    }
+    
     var body: some View {
         List {
-            ForEach(forms) { form in
+            ForEach(filteredForms) { form in
                 NavigationLink {
                     ConsentFormDetailView(form: form)
                 } label: {
@@ -26,7 +38,24 @@ struct ConsentFormListView: View {
             }
             .onDelete(perform: deleteForms)
         }
+        .searchable(text: $searchText, prompt: "Search forms")
         .navigationTitle("Consent Forms")
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    showingClientSelection = true
+                } label: {
+                    Image(systemName: "plus")
+                }
+            }
+        }
+        .sheet(isPresented: $showingClientSelection) {
+            ClientSelectionView { client in
+                NavigationStack {
+                    NewConsentFormView(client: client)
+                }
+            }
+        }
     }
     
     private func deleteForms(offsets: IndexSet) {
@@ -47,4 +76,4 @@ struct ConsentFormListView: View {
         ConsentFormListView()
             .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
-} 
+}

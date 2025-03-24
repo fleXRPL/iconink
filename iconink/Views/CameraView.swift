@@ -1,11 +1,18 @@
 import SwiftUI
 import AVFoundation
+#if canImport(UIKit)
 import UIKit
+#endif
 import CoreData
 
 struct CameraView: View {
-    let isCapturingFront: Bool
-    let client: NSManagedObject
+    // For client ID photos
+    var isCapturingFront: Bool = true
+    var client: NSManagedObject?
+    
+    // For general image capture
+    var onImageCaptured: ((UIImage) -> Void)?
+    
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) private var colorScheme
@@ -17,7 +24,9 @@ struct CameraView: View {
     
     static func preview() -> CameraView {
         let context = PersistenceController.preview.container.viewContext
-        let entityDescription = NSEntityDescription.entity(forEntityName: "Client", in: context)!
+        guard let entityDescription = NSEntityDescription.entity(forEntityName: "Client", in: context) else {
+            fatalError("Failed to get entity description for Client")
+        }
         let client = NSManagedObject(entity: entityDescription, insertInto: context)
         // Set basic properties for preview
         client.setValue(UUID(), forKey: "id")
@@ -96,9 +105,20 @@ struct CameraView: View {
                             .foregroundColor(.white.opacity(0.8))
                         
                         Button {
+                            // Add haptic feedback
+                            let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+                            impactFeedback.prepare()
+                            impactFeedback.impactOccurred()
+                            
+                            // Capture photo with error handling
                             camera.capturePhoto { image in
-                                capturedImage = image
-                                showingPreview = true
+                                if let image = image {
+                                    capturedImage = image
+                                    showingPreview = true
+                                } else {
+                                    // Show error alert if capture fails
+                                    showingPermissionAlert = true
+                                }
                             }
                         } label: {
                             ZStack {
@@ -108,9 +128,15 @@ struct CameraView: View {
                                 Circle()
                                     .stroke(.white, lineWidth: 2)
                                     .frame(width: 80, height: 80)
+                                
+                                // Add camera icon for better UX
+                                Image(systemName: "camera.fill")
+                                    .font(.system(size: 30))
+                                    .foregroundColor(.black)
                             }
                         }
                         .disabled(!camera.isReady)
+                        .shadow(color: .black.opacity(0.3), radius: 5, x: 0, y: 2)
                     }
                     .padding(.bottom, 50)
                 }
@@ -177,6 +203,11 @@ struct CameraView: View {
         .onAppear {
             camera.checkPermissions()
         }
+        .alert("Camera Error", isPresented: $showingPermissionAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text("Please allow camera access to capture ID photos")
+        }
     }
     
     private func savePhoto(_ image: UIImage) {
@@ -220,4 +251,4 @@ struct CameraPreviewView: UIViewRepresentable {
 
 #Preview {
     CameraView.preview()
-} 
+}

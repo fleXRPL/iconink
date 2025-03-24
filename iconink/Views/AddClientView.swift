@@ -1,4 +1,5 @@
 import SwiftUI
+import CoreData
 
 struct AddClientView: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -6,48 +7,50 @@ struct AddClientView: View {
     
     @State private var firstName = ""
     @State private var lastName = ""
-    @State private var phone = ""
     @State private var email = ""
+    @State private var phone = ""
     
     var body: some View {
-        NavigationStack {
-            Form {
-                Section("Basic Information") {
-                    TextField("First Name", text: $firstName)
-                    TextField("Last Name", text: $lastName)
-                    TextField("Phone", text: $phone)
-                        .keyboardType(.phonePad)
-                    TextField("Email", text: $email)
-                        .keyboardType(.emailAddress)
-                        .textInputAutocapitalization(.never)
+        Form {
+            Section("Personal Information") {
+                TextField("First Name", text: $firstName)
+                    .textContentType(.givenName)
+                TextField("Last Name", text: $lastName)
+                    .textContentType(.familyName)
+                TextField("Email", text: $email)
+                    .textContentType(.emailAddress)
+                    .keyboardType(.emailAddress)
+                    .autocapitalization(.none)
+                TextField("Phone", text: $phone)
+                    .textContentType(.telephoneNumber)
+                    .keyboardType(.phonePad)
+            }
+        }
+        .navigationTitle("New Client")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button("Cancel") {
+                    dismiss()
                 }
             }
-            .navigationTitle("New Client")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
-                        dismiss()
-                    }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("Save") {
+                    saveClient()
                 }
-                
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Save") {
-                        saveClient()
-                    }
-                    .disabled(firstName.isEmpty || lastName.isEmpty)
-                }
+                .disabled(firstName.isEmpty || lastName.isEmpty)
             }
         }
     }
     
     private func saveClient() {
         let client = Client(context: viewContext)
-        client.firstName = firstName
-        client.lastName = lastName
-        client.phone = phone.isEmpty ? nil : phone
+        client.id = UUID()
+        client.name = "\(firstName) \(lastName)".trimmingCharacters(in: .whitespaces)
         client.email = email.isEmpty ? nil : email
+        client.phone = phone.isEmpty ? nil : phone
         client.createdAt = Date()
+        client.updatedAt = Date()
         
         do {
             try viewContext.save()
@@ -61,4 +64,4 @@ struct AddClientView: View {
 #Preview {
     AddClientView()
         .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
-} 
+}

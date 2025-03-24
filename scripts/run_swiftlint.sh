@@ -19,14 +19,20 @@ cd "$PROJECT_ROOT"
 echo "Running SwiftLint..."
 echo "===================="
 
-# Run SwiftLint with specified configuration
-if swiftlint --config .swiftlint.yml; then
-    echo "===================="
-    echo "✅ SwiftLint completed successfully! No issues found."
+# Run SwiftLint and capture output to parse for warnings count
+LINT_OUTPUT=$(swiftlint --config .swiftlint.yml 2>&1)
+EXIT_CODE=$?
+echo "$LINT_OUTPUT"
+
+# Extract warning count from last line
+WARNING_COUNT=$(echo "$LINT_OUTPUT" | grep -o 'Found [0-9]* violations' | grep -o '[0-9]*')
+SERIOUS_COUNT=$(echo "$LINT_OUTPUT" | grep -o '[0-9]* serious' | grep -o '[0-9]*')
+
+echo "===================="
+if [ "$EXIT_CODE" -eq 0 ]; then
+    echo "✅ SwiftLint completed with $WARNING_COUNT warnings, $SERIOUS_COUNT serious issues."
 else
-    EXIT_CODE=$?
-    echo "===================="
-    echo "⚠️ SwiftLint found issues. Exit code: $EXIT_CODE"
+    echo "⚠️ SwiftLint found $SERIOUS_COUNT serious issues. Exit code: $EXIT_CODE"
     echo "Fix the issues or update the configuration in .swiftlint.yml"
 fi
 
