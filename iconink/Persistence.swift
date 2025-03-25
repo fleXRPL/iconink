@@ -1,10 +1,11 @@
 import CoreData
+import Combine
 
-class PersistenceController {
+class PersistenceController: ObservableObject {
     static let shared = PersistenceController()
     
     let container: NSPersistentContainer
-    private(set) var isStoreLoaded = false
+    @Published private(set) var isStoreLoaded = false
     
     init(inMemory: Bool = false) {
         container = NSPersistentContainer(name: "IconInk")

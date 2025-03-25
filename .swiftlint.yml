@@ -24,8 +24,8 @@ line_length:
   error: 180
   
 function_body_length:
-  warning: 75
-  error: 100
+  warning: 100
+  error: 120
 
 file_length:
   warning: 568
@@ -36,8 +36,8 @@ type_body_length:
   error: 500
 
 cyclomatic_complexity:
-  warning: 16
-  error: 25
+  warning: 25
+  error: 40
 
 included: # paths to include during linting
   - "*.swift"

@@ -1,8 +1,29 @@
 # IconInk
 
+![IconInk Logo](iconink/Assets.xcassets/AppIcon.appiconset/IconInk_nobg-60@3x.png)
+
 IconInk is an iOS application for tattoo and piercing professionals to manage client information, scan IDs, capture signatures, and generate consent forms with a strong emphasis on privacy, security, and ease of use.
 
-![IconInk Logo](iconink/Assets.xcassets/AppIcon.appiconset/AppIcon-83.5@2x.png)
+---
+
+#### Code Quality
+
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=fleXRPL_iconink&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=fleXRPL_iconink)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=fleXRPL_iconink&metric=bugs)](https://sonarcloud.io/summary/new_code?id=fleXRPL_iconink)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=fleXRPL_iconink&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=fleXRPL_iconink)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=fleXRPL_iconink&metric=coverage)](https://sonarcloud.io/summary/new_code?id=fleXRPL_iconink)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=fleXRPL_iconink&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=fleXRPL_iconink)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=fleXRPL_iconink&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=fleXRPL_iconink)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=fleXRPL_iconink&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=fleXRPL_iconink)
+
+#### Security and Reliability
+
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=fleXRPL_iconink&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=fleXRPL_iconink)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=fleXRPL_iconink&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=fleXRPL_iconink)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=fleXRPL_iconink&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=fleXRPL_iconink)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=fleXRPL_iconink&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=fleXRPL_iconink)
+
+---
 
 ## Features
 
@@ -40,11 +61,13 @@ IconInk takes privacy and security seriously:
 ## Installation
 
 1. Clone the repository:
+
 ```
 git clone https://github.com/fleXRPL/iconink.git
 ```
 
 2. Open the project in Xcode:
+
 ```
 cd iconink
 open iconink/iconink.xcodeproj

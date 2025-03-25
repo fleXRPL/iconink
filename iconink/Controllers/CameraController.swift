@@ -76,7 +76,15 @@ class CameraController: NSObject, ObservableObject {
         
         let settings = AVCapturePhotoSettings()
         settings.flashMode = .auto
-        settings.isHighResolutionPhotoEnabled = true
+        
+        // Use maxPhotoDimensions instead of deprecated isHighResolutionPhotoEnabled
+        if #available(iOS 16.0, *) {
+            settings.maxPhotoDimensions = CMVideoDimensions(width: 4032, height: 3024) // High resolution dimensions
+        } else {
+            // For older iOS versions
+            settings.isHighResolutionPhotoEnabled = true
+        }
+        
         output?.capturePhoto(with: settings, delegate: self)
     }
 }
