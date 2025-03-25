@@ -92,6 +92,23 @@ struct SettingsView: View {
                     Text("Please set up biometric authentication in your device settings.")
                 }
                 
+                Section(header: Text("Data Management")) {
+                    NavigationLink(destination: DataManagementView()) {
+                        HStack {
+                            Image(systemName: "arrow.up.arrow.down.square.fill")
+                                .foregroundColor(.blue)
+                                .frame(width: 24, height: 24)
+                            
+                            VStack(alignment: .leading) {
+                                Text("Export & Import Data")
+                                Text("Backup and restore client data")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                    }
+                }
+                
                 Section(header: Text("Consent Forms")) {
                     Picker("Default Template", selection: $defaultConsent) {
                         ForEach(settingsManager.availableTemplates, id: \.self) { template in
