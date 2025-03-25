@@ -213,9 +213,9 @@ struct CameraView: View {
     private func savePhoto(_ image: UIImage) {
         if let imageData = image.jpegData(compressionQuality: 0.8) {
             if isCapturingFront {
-                client.setValue(imageData, forKey: "frontIdPhoto")
+                client?.setValue(imageData, forKey: "frontIdPhoto")
             } else {
-                client.setValue(imageData, forKey: "backIdPhoto")
+                client?.setValue(imageData, forKey: "backIdPhoto")
             }
             
             do {

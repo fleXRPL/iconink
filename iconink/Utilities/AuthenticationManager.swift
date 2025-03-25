@@ -129,6 +129,7 @@ class AuthenticationManager: ObservableObject {
     
     @Published var isAuthenticated = false
     @Published var isLocked = false
+    @Published var isAuthenticating = false
     
     private var lockTimer: Timer?
     private var lastActiveTime = Date()
@@ -163,9 +164,14 @@ class AuthenticationManager: ObservableObject {
             return
         }
         
+        // Set authenticating state
+        isAuthenticating = true
+        
         // Use biometric authentication
         SecurityManager.shared.authenticateWithBiometrics(reason: "Unlock IconInk") { success, error in
             DispatchQueue.main.async {
+                self.isAuthenticating = false
+                
                 if success {
                     self.isAuthenticated = true
                     self.isLocked = false
