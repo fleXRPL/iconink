@@ -15,6 +15,7 @@ We currently provide security updates for the following versions of IconInk:
 ## Data Privacy
 
 IconInk is designed with a privacy-first approach:
+
 - All data is stored locally on the device
 - No data is transmitted to external servers or cloud services
 - Optional biometric authentication (Face ID/Touch ID) for app access
@@ -72,6 +73,7 @@ Security updates will be released as needed through the App Store. Users are enc
 ## Security Compliance
 
 IconInk is designed to help studios maintain compliance with various privacy regulations by:
+
 - Keeping all client data local
 - Providing secure storage options
 - Implementing access controls

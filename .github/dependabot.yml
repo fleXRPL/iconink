@@ -19,13 +19,14 @@ updates:
     # and only auto-merge security patches
     ignore:
       - dependency-name: "*"
-        update-types: ["version-update:semver-minor", "version-update:semver-patch"]
+        update-types:
+          ["version-update:semver-minor", "version-update:semver-patch"]
     # Allow security updates for all versions
     allow:
       - dependency-type: "direct"
         dependency-name: "*"
         update-types: ["security"]
-  
+
   # GitHub Actions dependencies
   - package-ecosystem: "github-actions"
     directory: "/"
@@ -39,4 +40,4 @@ updates:
       - "github-actions"
     commit-message:
       prefix: "👷"
-      include: "scope" 
+      include: "scope"

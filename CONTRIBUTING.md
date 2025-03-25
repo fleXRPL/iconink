@@ -45,6 +45,7 @@ This project adheres to our Code of Conduct. By participating, you are expected 
 ### Setup
 
 1. Open the project in Xcode:
+
    ```
    open iconink/iconink.xcodeproj
    ```
@@ -54,6 +55,7 @@ This project adheres to our Code of Conduct. By participating, you are expected 
 ## Pull Request Process
 
 1. Update your fork with the latest upstream changes:
+
    ```
    git fetch upstream
    git rebase upstream/main
@@ -64,6 +66,7 @@ This project adheres to our Code of Conduct. By participating, you are expected 
 3. Update documentation if necessary, including inline code comments and README updates
 
 4. Submit a pull request with a clear title and description:
+
    - Include the purpose of the PR
    - Reference any related issues (e.g., "Fixes #123")
    - Provide steps to test your changes
