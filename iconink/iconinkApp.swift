@@ -109,7 +109,7 @@ struct IconInkApp: App {
         WindowGroup {
             ContentView()
                 .withAuthenticationLock(isLocked: authManager.isLocked) {
-                    authManager.authenticateWithBiometrics { success, error in
+                    authManager.authenticateWithBiometrics { success, _ in
                         if success {
                             authManager.isLocked = false
                         }
@@ -117,7 +117,7 @@ struct IconInkApp: App {
                 }
                 .onAppear {
                     if authManager.isLocked {
-                        authManager.authenticateWithBiometrics { success, error in
+                        authManager.authenticateWithBiometrics { success, _ in
                             if success {
                                 authManager.isLocked = false
                             }
