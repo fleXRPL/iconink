@@ -1,6 +1,6 @@
 # IconInk
 
-![IconInk Logo](iconink/Assets.xcassets/AppIcon.appiconset/IconInk_nobg-60@3x.png)
+![IconInk Logo](iconink/Assets.xcassets/other_images/iconink_3.png)
 
 IconInk is an iOS application for tattoo and piercing professionals to manage client information, scan IDs, capture signatures, and generate consent forms with a strong emphasis on privacy, security, and ease of use.
 
