@@ -1,55 +1,55 @@
 {
   "images" : [
     {
-      "filename" : "IconInk_nobg-20@2x.png",
+      "filename" : "IconInk-20@2x.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "20x20"
     },
     {
-      "filename" : "IconInk_nobg-20@3x.png",
+      "filename" : "IconInk-20@3x.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "20x20"
     },
     {
-      "filename" : "IconInk_nobg-29@2x.png",
+      "filename" : "IconInk-29@2x.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "29x29"
     },
     {
-      "filename" : "IconInk_nobg-29@3x.png",
+      "filename" : "IconInk-29@3x.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "29x29"
     },
     {
-      "filename" : "IconInk_nobg-40@2x.png",
+      "filename" : "IconInk-40@2x.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "40x40"
     },
     {
-      "filename" : "IconInk_nobg-40@3x.png",
+      "filename" : "IconInk-40@3x.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "40x40"
     },
     {
-      "filename" : "IconInk_nobg-60@2x.png",
+      "filename" : "IconInk-60@2x.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "60x60"
     },
     {
-      "filename" : "IconInk_nobg-60@3x.png",
+      "filename" : "IconInk-60@3x.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "60x60"
     },
     {
-      "filename" : "IconInk_nobg-1024.png",
+      "filename" : "IconInk-1024.png",
       "idiom" : "ios-marketing",
       "scale" : "1x",
       "size" : "1024x1024"

@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "IconInk_nobg.png",
+      "filename" : "IconInk.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "IconInk_nobg@2x.png",
+      "filename" : "IconInk@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "IconInk_nobg@3x.png",
+      "filename" : "IconInk@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
