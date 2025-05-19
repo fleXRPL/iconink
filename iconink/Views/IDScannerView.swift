@@ -249,160 +249,106 @@ struct IDScannerView: View {
         }
     }
     
-    /// Try to use the extracted information
+    /// Processes the scanned image using Vision framework
+    /// - Parameter image: The scanned image to process
+    private func scanImage(_ image: UIImage) {
+        isScanning = true
+        scanError = nil
+        
+        // Create a new image-request handler
+        guard let cgImage = image.cgImage else {
+            handleScanError("Invalid image format")
+            return
+        }
+        
+        // Create a new request to recognize text
+        let request = VNRecognizeTextRequest { [weak self] request, error in
+            guard let self = self else { return }
+            
+            if let error = error {
+                self.handleScanError("Text recognition failed: \(error.localizedDescription)")
+                return
+            }
+            
+            // Process the recognized text
+            guard let observations = request.results as? [VNRecognizedTextObservation] else {
+                self.handleScanError("No text found in image")
+                return
+            }
+            
+            // Extract text from observations
+            let recognizedStrings = observations.compactMap { observation in
+                observation.topCandidates(1).first?.string
+            }
+            
+            // Parse the extracted text
+            let extractedInfo = IDTextParser.parseIDInformation(from: recognizedStrings)
+            
+            // Validate the extracted information
+            if IDTextParser.validateExtractedInfo(extractedInfo) {
+                self.handleSuccessfulScan(image, extractedInfo)
+            } else {
+                self.handleScanError("Could not extract required information")
+            }
+        }
+        
+        // Configure the request
+        request.recognitionLevel = .accurate
+        request.usesLanguageCorrection = true
+        request.customWords = ["ID", "LICENSE", "PASSPORT", "DRIVER", "STATE"]
+        
+        // Perform the text-recognition request
+        let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
+        do {
+            try handler.perform([request])
+        } catch {
+            handleScanError("Failed to process image: \(error.localizedDescription)")
+        }
+    }
+    
+    /// Handles a successful scan
+    /// - Parameters:
+    ///   - image: The scanned image
+    ///   - info: The extracted information
+    private func handleSuccessfulScan(_ image: UIImage, _ info: [String: String]) {
+        DispatchQueue.main.async {
+            self.extractedInfo = info
+            self.isScanning = false
+            
+            // Create IDScan entity
+            let scan = IDScan.create(
+                in: self.viewContext,
+                imageData: image.jpegData(compressionQuality: 0.8),
+                extractedInfo: info,
+                client: self.client
+            )
+            
+            // Save to CoreData
+            do {
+                try self.viewContext.save()
+            } catch {
+                self.handleScanError("Failed to save scan: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    /// Handles scan errors
+    /// - Parameter message: The error message
+    private func handleScanError(_ message: String) {
+        DispatchQueue.main.async {
+            self.scanError = message
+            self.isScanning = false
+            self.alertTitle = "Scanning Error"
+            self.alertMessage = message
+            self.showingAlert = true
+        }
+    }
+    
+    /// Uses the extracted information
     private func useExtractedInfo() {
         if let onClientInfoExtracted = onClientInfoExtracted {
             onClientInfoExtracted(extractedInfo)
             dismiss()
-        } else {
-            alertTitle = "No Handler"
-            alertMessage = "Information handler not configured"
-            showingAlert = true
-        }
-    }
-    
-    /// Check for missing important fields in the extracted info
-    private func checkMissingImportantFields(_ info: [String: String]) -> [String] {
-        let importantFields = ["name", "id", "dob"]
-        return importantFields.filter { !info.keys.contains($0) }
-    }
-    
-    private func scanImage(_ image: UIImage) {
-        isScanning = true
-        extractedInfo = [:]
-        scanError = nil
-        
-        IDScanner.scanID(from: image) { result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let idInfo):
-                    if !idInfo.isEmpty {
-                        extractedInfo = idInfo
-                        
-                        // Check if we have all important fields
-                        let missingFields = checkMissingImportantFields(idInfo)
-                        if !missingFields.isEmpty {
-                            alertTitle = "Missing Information"
-                            let fieldsText = missingFields.joined(separator: ", ")
-                            alertMessage = "The following fields could not be detected: \(fieldsText). "
-                                + "You may want to try scanning again or fill in this information manually."
-                            showingAlert = true
-                        }
-                        isScanning = false
-                    } else {
-                        // Try fallback method if first scan was empty
-                        tryFallbackScan(image)
-                    }
-                    
-                case .failure(let error):
-                    // Handle different error types
-                    switch error {
-                    case .poorImageQuality(let reason):
-                        scanError = "Image quality issue: \(reason). Try with better lighting and focus."
-                        
-                        // Automatically try with the fallback method if quality is the issue
-                        if !usedFallbackMethod {
-                            tryFallbackScan(image)
-                            return
-                        }
-                        
-                    case .imageConversionFailed:
-                        scanError = "Unable to process the image. Please try again with a different image."
-                        
-                    case .noTextFound:
-                        scanError = "No text was found in the image. Make sure the ID is clearly visible."
-                        
-                        // Try fallback method if no text was found
-                        if !usedFallbackMethod {
-                            tryFallbackScan(image)
-                            return
-                        }
-                        
-                    case .textRecognitionFailed:
-                        scanError = "Text recognition failed. Please try again with a clearer image."
-                        
-                    case .invalidTextFound:
-                        scanError = "The text found does not appear to be from a valid ID. Make sure the entire ID is visible."
-                        
-                    case .insufficientTextConfidence:
-                        scanError = "Text could not be recognized with confidence. Try with better lighting and focus."
-                        
-                        // Try fallback method if confidence is low
-                        if !usedFallbackMethod {
-                            tryFallbackScan(image)
-                            return
-                        }
-                        
-                    case .processingError(let message):
-                        scanError = "Processing error: \(message). Please try again."
-                    }
-                    
-                    if scanAttempts > 1 {
-                        showingTips = true
-                    }
-                    
-                    isScanning = false
-                }
-            }
-        }
-    }
-    
-    /// Try a fallback scanning method for challenging images
-    private func tryFallbackScan(_ image: UIImage) {
-        usedFallbackMethod = true
-        
-        // Update UI to show we're trying an alternative method
-        DispatchQueue.main.async {
-            alertTitle = "Trying Alternative Method"
-            alertMessage = "The standard scan had difficulty. Trying enhanced processing for better results..."
-            showingAlert = true
-        }
-        
-        // Use the alternative scanning method
-        IDScanner.scanLowContrastID(from: image) { result in
-            DispatchQueue.main.async {
-                isScanning = false
-                
-                switch result {
-                case .success(let idInfo):
-                    if !idInfo.isEmpty {
-                        extractedInfo = idInfo
-                        
-                        // Check if we have all important fields
-                        let missingFields = checkMissingImportantFields(idInfo)
-                        if !missingFields.isEmpty {
-                            alertTitle = "Missing Information"
-                            let fieldsText = missingFields.joined(separator: ", ")
-                            alertMessage = "The following fields could not be detected: \(fieldsText). "
-                                + "You may want to try scanning again or fill in this information manually."
-                            showingAlert = true
-                        }
-                    } else {
-                        scanError = "No information could be extracted from this document, even with enhanced processing."
-                        
-                        if scanAttempts > 1 {
-                            showingTips = true
-                        }
-                    }
-                    
-                case .failure(let error):
-                    // Handle different error types
-                    switch error {
-                    case .poorImageQuality(let reason):
-                        scanError = "Image quality issue: \(reason). Please try again with better lighting."
-                    case .noTextFound:
-                        scanError = "No text was found in the image. Make sure the ID is clearly visible."
-                    case .insufficientTextConfidence:
-                        scanError = "Text could not be recognized with confidence. Try with better lighting."
-                    default:
-                        scanError = "ID scanning failed. Please try again with a clearer image."
-                    }
-                    
-                    if scanAttempts > 1 {
-                        showingTips = true
-                    }
-                }
-            }
         }
     }
 }

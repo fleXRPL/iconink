@@ -1,22 +1,50 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22522" systemVersion="24.3.0" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="Client" representedClassName="Client" syncable="YES">
-        <attribute name="frontIdPhoto" optional="YES" attributeType="Binary"/>
-        <attribute name="backIdPhoto" optional="YES" attributeType="Binary"/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22522" systemVersion="24.4.0" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
+    <entity name="Client" representedClassName="Client" syncable="YES" codeGenerationType="class">
+        <attribute name="address" optional="YES" attributeType="String"/>
+        <attribute name="dob" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="email" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
-        <attribute name="email" optional="YES" attributeType="String"/>
         <attribute name="phone" optional="YES" attributeType="String"/>
+        <attribute name="frontIdPhoto" optional="YES" attributeType="Binary"/>
+        <attribute name="backIdPhoto" optional="YES" attributeType="Binary"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="updatedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="signature" optional="YES" attributeType="Binary"/>
         <relationship name="consentForms" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ConsentForm" inverseName="client" inverseEntity="ConsentForm"/>
+        <relationship name="idScans" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="IDScan" inverseName="client" inverseEntity="IDScan"/>
+        <relationship name="signatures" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Signature" inverseName="client" inverseEntity="Signature"/>
     </entity>
-    <entity name="ConsentForm" representedClassName="ConsentForm" syncable="YES">
+    <entity name="ConsentForm" representedClassName="ConsentForm" syncable="YES" codeGenerationType="class">
         <attribute name="title" attributeType="String"/>
         <attribute name="content" attributeType="String"/>
-        <attribute name="signature" optional="YES" attributeType="Binary"/>
-        <attribute name="dateCreated" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="clientSignature" optional="YES" attributeType="Binary"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="pdfData" optional="YES" attributeType="Binary"/>
+        <attribute name="type" optional="YES" attributeType="String"/>
         <relationship name="client" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Client" inverseName="consentForms" inverseEntity="Client"/>
+        <relationship name="signature" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Signature" inverseName="consentForm" inverseEntity="Signature"/>
+    </entity>
+    <entity name="IDScan" representedClassName="IDScan" syncable="YES" codeGenerationType="class">
+        <attribute name="extractedInfo" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[String:String]"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="imageData" optional="YES" attributeType="Binary"/>
+        <attribute name="isValid" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="scanDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="scanQuality" optional="YES" attributeType="Double" defaultValueString="1.0" usesScalarValueType="YES"/>
+        <attribute name="scanType" optional="YES" attributeType="String"/>
+        <attribute name="validationErrors" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[String]"/>
+        <relationship name="client" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Client" inverseName="idScans" inverseEntity="Client"/>
+    </entity>
+    <entity name="Signature" representedClassName="Signature" syncable="YES" codeGenerationType="class">
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="isValid" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="signatureData" optional="YES" attributeType="Binary"/>
+        <attribute name="signedBy" optional="YES" attributeType="String"/>
+        <relationship name="client" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Client" inverseName="signatures" inverseEntity="Client"/>
+        <relationship name="consentForm" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ConsentForm" inverseName="signature" inverseEntity="ConsentForm"/>
     </entity>
 </model>
