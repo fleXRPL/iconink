@@ -13,6 +13,12 @@ struct CameraView: View {
     // For general image capture
     var onImageCaptured: ((UIImage) -> Void)?
     
+    init(isCapturingFront: Bool = true, client: NSManagedObject? = nil, onImageCaptured: ((UIImage) -> Void)? = nil) {
+        self.isCapturingFront = isCapturingFront
+        self.client = client
+        self.onImageCaptured = onImageCaptured
+    }
+    
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) private var colorScheme
@@ -191,7 +197,11 @@ struct CameraView: View {
                         
                         ToolbarItem(placement: .navigationBarTrailing) {
                             Button("Use Photo") {
-                                savePhoto(image)
+                                if let onImageCaptured = onImageCaptured {
+                                    onImageCaptured(image)
+                                } else {
+                                    savePhoto(image)
+                                }
                                 dismiss()
                             }
                             .foregroundColor(.white)

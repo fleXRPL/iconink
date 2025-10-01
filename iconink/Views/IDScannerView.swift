@@ -151,8 +151,13 @@ struct IDScannerView: View {
     @State private var scanAttempts = 0
     @State private var usedFallbackMethod = false
     
-    var client: Client?
-    var onClientInfoExtracted: (([String: String]) -> Void)?
+    let client: Client?
+    let onClientInfoExtracted: (([String: String]) -> Void)?
+    
+    init(client: Client? = nil, onClientInfoExtracted: (([String: String]) -> Void)? = nil) {
+        self.client = client
+        self.onClientInfoExtracted = onClientInfoExtracted
+    }
     
     var body: some View {
         NavigationView {
@@ -230,11 +235,11 @@ struct IDScannerView: View {
                 } : nil
             )
             .sheet(isPresented: $showingScanner) {
-                CameraView(isCapturingFront: true) { image in
+                CameraView(isCapturingFront: true, onImageCaptured: { image in
                     self.scannedImage = image
                     self.scanImage(image)
                     self.scanAttempts += 1
-                }
+                })
             }
             .alert(isPresented: $showingAlert) {
                 Alert(

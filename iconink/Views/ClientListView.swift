@@ -17,7 +17,7 @@ struct ClientListView: View {
                     ClientDetailView(client: client)
                 } label: {
                     VStack(alignment: .leading) {
-                        Text("\(client.firstName) \(client.lastName)")
+                        Text(client.fullName)
                             .font(.headline)
                         if let phone = client.phone {
                             Text(phone)
