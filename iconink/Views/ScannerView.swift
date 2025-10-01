@@ -101,7 +101,7 @@ struct ScannerView: View {
                 }
             }
             .sheet(isPresented: $showingIDScanner) {
-                IDScannerView { extractedInfo in
+                IDScannerView(client: selectedClient) { extractedInfo in
                     // Handle the extracted information
                     if !extractedInfo.isEmpty, let client = selectedClient {
                         // Update client with extracted information
@@ -113,47 +113,23 @@ struct ScannerView: View {
                             return
                         }
 
-                        // Update client with encrypted data
-                        if SettingsManager.shared.encryptData {
-                            // Convert string to data for encryption
-                            if let nameData = name.data(using: .utf8),
-                               let encryptedName = SecurityManager.shared.encryptData(nameData) {
-                                client.name = String(data: encryptedName, encoding: .utf8)
-                            } else {
-                                client.name = name
-                            }
-                            
-                            if let email = extractedInfo["email"], !email.isEmpty,
-                               let emailData = email.data(using: .utf8),
-                               let encryptedEmail = SecurityManager.shared.encryptData(emailData) {
-                                client.email = String(data: encryptedEmail, encoding: .utf8)
-                            } else if let email = extractedInfo["email"], !email.isEmpty {
-                                client.email = email
-                            }
-                            
-                            if let phone = extractedInfo["phone"], !phone.isEmpty,
-                               let phoneData = phone.data(using: .utf8),
-                               let encryptedPhone = SecurityManager.shared.encryptData(phoneData) {
-                                client.phone = String(data: encryptedPhone, encoding: .utf8)
-                            } else if let phone = extractedInfo["phone"], !phone.isEmpty {
-                                client.phone = phone
-                            }
-                        } else {
-                            // Store without encryption
-                            client.name = name
-                            if let email = extractedInfo["email"], !email.isEmpty {
-                                client.email = email
-                            }
-                            if let phone = extractedInfo["phone"], !phone.isEmpty {
-                                client.phone = phone
-                            }
+                        // Update client with extracted data
+                        client.name = name
+                        if let email = extractedInfo["email"], !email.isEmpty {
+                            client.email = email
+                        }
+                        if let phone = extractedInfo["phone"], !phone.isEmpty {
+                            client.phone = phone
+                        }
+                        if let address = extractedInfo["address"], !address.isEmpty {
+                            client.address = address
                         }
 
                         // Save with error handling
                         do {
                             try viewContext.save()
                             alertTitle = "Success"
-                            alertMessage = "Client data saved securely"
+                            alertMessage = "Client data saved successfully"
                             showingAlert = true
                         } catch {
                             alertTitle = "Save Error"
@@ -162,6 +138,13 @@ struct ScannerView: View {
                         }
                     }
                 }
+            }
+            .alert(isPresented: $showingAlert) {
+                Alert(
+                    title: Text(alertTitle),
+                    message: Text(alertMessage),
+                    dismissButton: .default(Text("OK"))
+                )
             }
         }
     }
@@ -194,6 +177,9 @@ struct ScannerView: View {
     }
     
     @State private var showingIDScanner = false
+    @State private var alertTitle = ""
+    @State private var alertMessage = ""
+    @State private var showingAlert = false
 }
 
 struct ClientSelectionView: View {
@@ -216,7 +202,7 @@ struct ClientSelectionView: View {
                     } label: {
                         HStack {
                             VStack(alignment: .leading) {
-                                Text("\(client.firstName) \(client.lastName)")
+                                Text(client.fullName)
                                     .font(.headline)
                                 if let phone = client.phone {
                                     Text(phone)

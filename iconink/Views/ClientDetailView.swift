@@ -93,8 +93,7 @@ struct ClientDetailView: View {
 #Preview {
     let context = PersistenceController.preview.container.viewContext
     let client = Client(context: context)
-    client.firstName = "John"
-    client.lastName = "Doe"
+    client.name = "John Doe"
     client.phone = "555-0123"
     client.email = "john@example.com"
     

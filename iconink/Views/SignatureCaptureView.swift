@@ -12,6 +12,12 @@ struct SignatureCaptureView: View {
     let consentForm: ConsentForm?
     var onSignatureCapture: ((Signature) -> Void)?
     
+    init(client: Client? = nil, consentForm: ConsentForm? = nil, onSignatureCapture: ((Signature) -> Void)? = nil) {
+        self.client = client
+        self.consentForm = consentForm
+        self.onSignatureCapture = onSignatureCapture
+    }
+    
     @State private var canvasView = PKCanvasView()
     @State private var showingPreview = false
     @State private var showingAlert = false
@@ -181,7 +187,7 @@ class SignatureCaptureViewModel: ObservableObject {
         let signature = Signature.create(
             in: context,
             signatureData: signatureData,
-            signedBy: client?.name ?? "Unknown",
+            signedBy: client?.fullName ?? "Unknown",
             client: client,
             consentForm: consentForm
         )

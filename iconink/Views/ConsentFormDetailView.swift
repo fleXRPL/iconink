@@ -1,5 +1,5 @@
 import SwiftUI
-import PDFKit
+import CoreData
 
 struct ConsentFormDetailView: View {
     let form: ConsentForm
@@ -10,7 +10,7 @@ struct ConsentFormDetailView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 // Client information
-                if let client = form.client as? Client {
+                if let client = form.client {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Client Information")
                             .font(.headline)
@@ -50,7 +50,7 @@ struct ConsentFormDetailView: View {
                 
                 // Date signed
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Date Signed")
+                    Text("Date Created")
                         .font(.headline)
                     Text(form.dateCreated, style: .date)
                         .foregroundColor(.secondary)
@@ -77,45 +77,22 @@ struct ConsentFormDetailView: View {
     }
     
     private func exportPDF() {
-        // Show loading indicator
-        let loadingIndicator = UIActivityIndicatorView(style: .large)
-        loadingIndicator.startAnimating()
-        loadingIndicator.center = UIApplication.shared.windows.first?.center ?? CGPoint(x: 0, y: 0)
-        UIApplication.shared.windows.first?.addSubview(loadingIndicator)
-        
-        // Use background thread for PDF generation
-        DispatchQueue.global(qos: .userInitiated).async {
-            // Use the enhanced PDFExporter to create a secure PDF with metadata
-            let metadata = PDFExporter.standardMetadata(for: self.form)
-            
-            // Generate the PDF with watermark and optional encryption based on settings
-            let generatedPDF: Data?
-            if SettingsManager.shared.encryptData {
-                generatedPDF = PDFExporter.generateSecurePDF(from: self.form, encrypt: true)
-            } else {
-                generatedPDF = PDFExporter.generateSecurePDF(from: self.form)
-            }
-            
-            // Add standard metadata
-            if let pdf = generatedPDF {
-                self.pdfData = PDFExporter.addMetadata(to: pdf, metadata: metadata)
-            }
-            
-            // Update UI on main thread
-            DispatchQueue.main.async {
-                // Remove loading indicator
-                loadingIndicator.removeFromSuperview()
-                
-                // Add haptic feedback on success
-                let generator = UINotificationFeedbackGenerator()
-                if self.pdfData != nil {
-                    generator.notificationOccurred(.success)
-                    self.showingExportOptions = true
-                } else {
-                    generator.notificationOccurred(.error)
-                    // Show error alert (would be implemented in a real app)
-                }
-            }
+        // Generate PDF using the form's createPDF method
+        if let pdfData = form.createPDF() {
+            self.pdfData = pdfData
+            showingExportOptions = true
         }
     }
+}
+
+// ShareSheet for exporting PDF
+struct ShareSheet: UIViewControllerRepresentable {
+    var items: [Any]
+    
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        let controller = UIActivityViewController(activityItems: items, applicationActivities: nil)
+        return controller
+    }
+    
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }
